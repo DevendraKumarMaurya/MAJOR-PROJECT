@@ -1,52 +1,77 @@
-# Realtime Chat App - Backend
+# Realtime Chat App - Frontend
 
-A real-time chat application backend built with Node.js, Express, Socket.IO, and MongoDB. This server provides REST API endpoints for user authentication, messaging, file uploads, and real-time communication capabilities.
+A modern, real-time chat application frontend built with React, TypeScript, and Vite. Features a responsive design with real-time messaging, file sharing, user authentication, and channel management.
 
 ## Features
 
-- **User Authentication**: JWT-based authentication with signup/login
-- **Real-time Messaging**: Socket.IO for instant message delivery
-- **File Uploads**: Support for profile images and file sharing
-- **Channel Support**: Create and manage chat channels
-- **Message History**: Persistent message storage with MongoDB
-- **CORS Enabled**: Cross-origin resource sharing for frontend integration
+- **Modern UI/UX**: Clean and responsive design with Tailwind CSS
+- **Real-time Messaging**: Instant messaging with Socket.IO
+- **User Authentication**: JWT-based login/signup with profile management
+- **File Sharing**: Upload and share files in conversations
+- **Channel Support**: Create and manage group chat channels
+- **Profile Customization**: Avatar uploads and color themes
+- **Direct Messages**: One-on-one conversations
+- **Contact Management**: Search and add contacts
+- **Message History**: Persistent chat history
+- **File Downloads**: Download shared files with progress indicators
+- **Responsive Design**: Works on desktop and mobile devices
 
 ## Tech Stack
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Real-time**: Socket.IO
-- **Authentication**: JWT (JSON Web Tokens)
-- **File Upload**: Multer
-- **Password Hashing**: bcrypt
-- **Environment Management**: dotenv
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS with custom design system
+- **UI Components**: Radix UI components with shadcn/ui
+- **State Management**: Zustand
+- **HTTP Client**: Axios
+- **Real-time**: Socket.IO Client
+- **Routing**: React Router DOM
+- **Notifications**: Sonner (toast notifications)
+- **Animations**: Lottie React
+- **Icons**: React Icons
+- **Date Handling**: Moment.js
 
 ## Project Structure
 
 ```text
-server/
-├── controllers/
-│   ├── AuthController.js          # Authentication logic
-│   ├── ChannelController.js       # Channel management
-│   └── MessagesControllers.js     # Message handling
-├── middlewares/
-│   └── AuthMiddleware.js           # JWT verification middleware
-├── models/
-│   ├── UserModel.js               # User schema
-│   ├── MessagesModel.js           # Message schema
-│   └── ChannelModel.js            # Channel schema
-├── routes/
-│   ├── AuthRoutes.js              # Authentication routes
-│   ├── ContactRoutes.js           # Contact management routes
-│   ├── MessagesRoutes.js          # Message routes
-│   └── ChannelRoutes.js           # Channel routes
-├── uploads/
-│   ├── profiles/                  # Profile image uploads
-│   └── files/                     # File message uploads
-├── index.js                       # Main server file
-├── socket.js                      # Socket.IO configuration
-├── package.json
+client/
+├── public/
+│   └── chat-icon.png              # App favicon
+├── src/
+│   ├── assets/                    # Static assets
+│   │   ├── chat-logo.svg
+│   │   ├── login2.png
+│   │   ├── lottie-json.json
+│   │   └── victory.svg
+│   ├── components/
+│   │   ├── ContactList.tsx        # Contact list component
+│   │   └── ui/                    # Reusable UI components
+│   ├── context/
+│   │   ├── socketContext.ts       # Socket context types
+│   │   └── SocketContext.tsx      # Socket.IO context provider
+│   ├── hooks/
+│   │   └── useSocket.ts           # Custom Socket.IO hook
+│   ├── lib/
+│   │   ├── api-clients.ts         # Axios API client configuration
+│   │   ├── multipleSelectUtils.ts # Multi-select utilities
+│   │   └── utils.ts               # Utility functions
+│   ├── pages/
+│   │   ├── auth/                  # Authentication pages
+│   │   ├── chat/                  # Main chat interface
+│   │   └── profile/               # User profile pages
+│   ├── store/                     # Zustand store configuration
+│   ├── utils/
+│   │   └── constants.ts           # API endpoints and constants
+│   ├── App.tsx                    # Main app component
+│   ├── index.css                  # Global styles and Tailwind
+│   ├── main.tsx                   # App entry point
+│   └── vite-env.d.ts              # Vite environment types
+├── components.json                # shadcn/ui configuration
+├── eslint.config.js               # ESLint configuration
+├── index.html                     # HTML template
+├── package.json                   # Dependencies and scripts
+├── tsconfig.json                  # TypeScript configuration
+├── vite.config.ts                 # Vite configuration
 └── .env                          # Environment variables
 ```
 
@@ -56,7 +81,7 @@ server/
 
    ```bash
    git clone <repository-url>
-   cd REALTIME-CHAT-APP/server
+   cd REALTIME-CHAT-APP/client
    ```
 
 2. **Install dependencies**
@@ -64,233 +89,300 @@ server/
    ```bash
    # Using pnpm (recommended)
    pnpm install
-   
+
    # Or using npm
    npm install
    ```
 
 3. **Environment Setup**
 
-   Create a `.env` file in the server directory:
+   Create a `.env` file in the client directory:
 
    ```env
-   PORT=3000
-   DATABASE_URL=mongodb://localhost:27017/realtime-chat
-   JWT_KEY=your-super-secret-jwt-key
-   ORIGIN=http://localhost:5173
+   VITE_SERVER_URL=http://localhost:3000
    ```
 
-4. **Start MongoDB**
-
-   Make sure MongoDB is running on your system:
+4. **Start the development server**
 
    ```bash
-   # Windows (if installed as service)
-   net start MongoDB
-   
-   # macOS with Homebrew
-   brew services start mongodb/brew/mongodb-community
-   
-   # Linux
-   sudo systemctl start mongod
+   pnpm dev
    ```
 
 ## Scripts
 
 ```bash
-# Development with auto-restart
+# Start development server
 pnpm dev
 
-# Production start
-pnpm start
+# Build for production
+pnpm build
 
-# Run tests (if available)
-pnpm test
+# Preview production build
+pnpm preview
+
+# Run linting
+pnpm lint
 ```
 
-## API Endpoints
+## Key Components
 
-### Authentication
+### Authentication ([`auth/index.tsx`](src/pages/auth/index.tsx))
 
-- `POST /api/auth/signup` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/user-info` - Get user information (Protected)
-- `POST /api/auth/update-profile` - Update user profile (Protected)
-- `POST /api/auth/add-profile-image` - Upload profile image (Protected)
-- `DELETE /api/auth/remove-profile-image` - Remove profile image (Protected)
-- `POST /api/auth/logout` - User logout (Protected)
+- **Login/Signup Forms**: Tabbed interface with validation
+- **JWT Authentication**: Automatic token management
+- **Redirect Logic**: Profile setup or chat based on user state
 
-### Messages
+### Chat Interface ([`chat/index.tsx`](src/pages/chat/index.tsx))
 
-- `POST /api/messages/get-messages` - Retrieve chat messages (Protected)
-- `POST /api/messages/upload-file` - Upload file for messaging (Protected)
+- **Real-time Messaging**: Socket.IO integration
+- **File Upload/Download**: Progress indicators and file management
+- **Contact Management**: Search and add new contacts
+- **Channel Support**: Group chat functionality
 
-### Contacts
+### Profile Management ([`profile/index.tsx`](src/pages/profile/index.tsx))
 
-- Contact management endpoints (Protected)
+- **Profile Setup**: First-time user onboarding
+- **Avatar Upload**: Profile image management
+- **Color Themes**: Customizable user colors
+- **Profile Updates**: Edit name and preferences
 
-### Channels
+### Message Container
 
-- Channel creation and management endpoints (Protected)
+- **Message Rendering**: Support for text and file messages
+- **File Downloads**: Automatic download with progress tracking
+- **Message Types**: Direct messages and channel messages
+- **Timestamp Display**: Formatted message times
 
-## Socket.IO Events
+## State Management
 
-### Client to Server
+The app uses Zustand for state management with the following stores:
 
-- `sendMessage` - Send a direct message
-- `sendChannelMessage` - Send a message to a channel
-- `joinChannel` - Join a specific channel
+### Auth Store
 
-### Server to Client
-
-- `receiveMessage` - Receive a new message
-- `receiveChannelMessage` - Receive a channel message
-
-## Database Models
-
-### User Model
-
-```javascript
+```typescript
 {
-  email: String (required, unique),
-  password: String (required, hashed),
-  firstName: String,
-  lastName: String,
-  image: String,
-  color: Number,
-  profileSetup: Boolean (default: false)
+  userInfo: UserInfo | undefined,
+  setUserInfo: (userInfo: UserInfo | undefined) => void
 }
 ```
 
-### Message Model
+### Chat Store
 
-```javascript
+```typescript
 {
-  sender: ObjectId (ref: User, required),
-  recipient: ObjectId (ref: User),
-  messageType: String (enum: ['text', 'file'], required),
-  content: String (required for text messages),
-  fileUrl: String (required for file messages),
-  timestamp: Date (default: now)
+  selectedChatType: "contact" | "channel" | undefined,
+  selectedChatData: Contact | Channel | undefined,
+  directMessagesContacts: Contact[],
+  channels: Channel[],
+  messages: Message[],
+  // ... other chat-related state
 }
 ```
 
-### Channel Model
+## API Integration
 
-```javascript
-{
-  name: String (required),
-  members: [ObjectId] (ref: User, required),
-  admin: ObjectId (ref: User, required),
-  message: [ObjectId] (ref: Message),
-  createdAt: Date (default: now),
-  updatedAt: Date (default: now)
-}
+### HTTP Client ([`api-clients.ts`](src/lib/api-clients.ts))
+
+- **Axios Configuration**: Base URL and interceptors
+- **Cookie Support**: Automatic credential handling
+- **Error Handling**: Centralized error management
+
+### API Endpoints ([`constants.ts`](src/utils/constants.ts))
+
+- **Authentication**: Login, signup, profile management
+- **Messages**: Send, receive, file upload
+- **Contacts**: Search, get contacts
+- **Channels**: Create, manage channels
+
+## Real-time Features
+
+### Socket.IO Integration ([`SocketContext.tsx`](src/context/SocketContext.tsx))
+
+- **Connection Management**: Automatic connect/disconnect
+- **Message Events**: Real-time message delivery
+- **Channel Events**: Group message broadcasting
+- **File Upload Events**: Real-time file sharing
+
+### Socket Events
+
+- `sendMessage` - Send direct message
+- `sendChannelMessage` - Send channel message
+- `receiveMessage` - Receive direct message
+- `receiveChannelMessage` - Receive channel message
+
+## Styling
+
+### Tailwind CSS ([`index.css`](src/index.css))
+
+- **Custom Design System**: Extended Tailwind configuration
+- **Dark/Light Mode**: CSS custom properties for theming
+- **Poppins Font**: Multiple font weights imported
+- **Component Styles**: Custom utility classes
+
+### UI Components
+
+- **shadcn/ui**: Pre-built accessible components
+- **Radix UI**: Headless UI primitives
+- **Custom Styling**: Tailwind-based component styling
+
+## File Handling
+
+### File Upload
+
+- **Profile Images**: Avatar upload with preview
+- **Message Files**: File attachment in conversations
+- **Progress Tracking**: Real-time upload progress
+- **File Validation**: Type and size restrictions
+
+### File Download
+
+- **Automatic Downloads**: Click-to-download functionality
+- **Progress Indicators**: Download progress tracking
+- **File Icons**: Different icons for file types
+
+## Routing
+
+### Protected Routes
+
+- **Authentication Check**: Redirect to login if not authenticated
+- **Profile Setup**: Force profile completion for new users
+- **Private Routes**: Chat and profile pages require authentication
+
+### Route Structure
+
+```typescript
+- `/auth` - Login/Signup page
+- `/profile` - User profile setup/edit
+- `/chat` - Main chat interface (protected)
 ```
-
-## Authentication Flow
-
-1. **Signup/Login**: User provides credentials
-2. **JWT Generation**: Server creates JWT token with user info
-3. **Cookie Storage**: JWT stored as httpOnly cookie
-4. **Protected Routes**: Middleware verifies JWT for protected endpoints
-5. **Socket Authentication**: Socket connection authenticated via user ID
-
-## File Upload
-
-- **Profile Images**: Stored in `uploads/profiles/` directory
-- **Message Files**: Stored in `uploads/files/` with timestamp-based folders
-- **Supported**: All file types for messages, images for profiles
-- **Security**: File validation and secure storage
-
-## Error Handling
-
-The API returns consistent error responses:
-
-```javascript
-{
-  message: "Error description",
-  // Additional error details if applicable
-}
-```
-
-Common HTTP status codes:
-
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request
-- `401` - Unauthorized
-- `403` - Forbidden
-- `404` - Not Found
-- `500` - Internal Server Error
 
 ## Development
 
-### Adding New Routes
+### Adding New Components
 
-1. Create controller function in appropriate controller file
-2. Add route in corresponding route file
-3. Apply authentication middleware if needed
-4. Update this README with new endpoint
+1. Create component in appropriate directory
+2. Follow TypeScript interfaces from [`store/Interface.ts`](src/store/Interface.ts)
+3. Use existing UI components from [`components/ui/`](src/components/ui/)
+4. Apply consistent styling with Tailwind CSS
 
-### Database Operations
+### State Updates
 
-All database operations use Mongoose ODM with async/await pattern:
+1. Use Zustand store for global state
+2. Follow existing patterns in [`store/slices/`](src/store/slices/)
+3. Update TypeScript interfaces as needed
 
-```javascript
-const user = await User.findById(userId);
-const message = await Message.create(messageData);
+### API Integration Overview
+
+1. Add new endpoints to [`constants.ts`](src/utils/constants.ts)
+2. Use existing [`apiClient`](src/lib/api-clients.ts) for HTTP requests
+3. Handle errors with toast notifications
+
+## Build and Deployment
+
+### Production Build
+
+```bash
+# Build the application
+pnpm build
+
+# Preview the build
+pnpm preview
 ```
 
-### Socket.IO Integration
+### Environment Variables
 
-Real-time features are handled in [`socket.js`](socket.js):
+```env
+VITE_SERVER_URL=https://your-backend-api.com
+```
 
-- User connection management
-- Message broadcasting
-- Channel communication
+### Deployment Considerations
 
-## Production Deployment
+- **Static Hosting**: Built files can be served from any static host
+- **Environment Configuration**: Update API URLs for production
+- **Asset Optimization**: Vite handles automatic optimization
+- **Browser Support**: Modern browsers with ES2015+ support
 
-1. **Environment Variables**: Set production values in `.env`
-2. **Database**: Use MongoDB Atlas or production MongoDB instance
-3. **Security**: Implement additional security headers
-4. **Logging**: Add proper logging for production
-5. **Process Management**: Use PM2 or similar for process management
+## Performance Features
 
-## Security Features
+### Optimization
 
-- **Password Hashing**: bcrypt with salt rounds
-- **JWT Authentication**: Secure token-based auth
-- **CORS Configuration**: Restricted origins
-- **Input Validation**: Server-side validation
-- **File Upload Security**: Multer configuration with limits
+- **Vite Build**: Fast development and optimized production builds
+- **Code Splitting**: Automatic route-based code splitting
+- **Asset Optimization**: Image and asset optimization
+- **Tree Shaking**: Unused code elimination
+
+### Real-time Optimization
+
+- **Socket Connection**: Efficient connection management
+- **Message Caching**: Local message storage
+- **File Caching**: Prevent duplicate file uploads
+
+## Browser Support
+
+- **Modern Browsers**: Chrome, Firefox, Safari, Edge
+- **ES2015+**: Modern JavaScript features
+- **WebSocket Support**: Required for real-time features
 
 ## Dependencies
 
-### Production Dependencies
+### Core Dependencies
 
-- `express` - Web framework
-- `mongoose` - MongoDB ODM
-- `socket.io` - Real-time communication
-- `jsonwebtoken` - JWT implementation
-- `bcrypt` - Password hashing
-- `multer` - File upload handling
-- `cors` - Cross-origin resource sharing
-- `cookie-parser` - Cookie parsing
-- `dotenv` - Environment variable management
+- `react` - UI library
+- `react-dom` - React DOM renderer
+- `react-router-dom` - Client-side routing
+- `typescript` - Type safety
+- `axios` - HTTP client
+- `socket.io-client` - Real-time communication
+- `zustand` - State management
+
+### UI Dependencies
+
+- `@radix-ui/*` - Headless UI components
+- `tailwindcss` - Utility-first CSS
+- `react-icons` - Icon library
+- `lottie-react` - Animation library
+- `sonner` - Toast notifications
 
 ### Development Dependencies
 
-- `nodemon` - Development server with auto-restart
+- `vite` - Build tool
+- `@vitejs/plugin-react` - React plugin for Vite
+- `eslint` - Code linting
+- `@types/*` - TypeScript type definitions
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch: `git checkout -b feature/new-feature`
 3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+4. Follow the existing code style
+5. Test your changes
+6. Submit a pull request
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Socket Connection Failed**
+
+   - Check if backend server is running
+   - Verify `VITE_SERVER_URL` in `.env`
+
+2. **Build Errors**
+
+   - Clear node_modules and reinstall dependencies
+   - Check TypeScript errors: `pnpm build`
+
+3. **Styling Issues**
+   - Ensure Tailwind CSS is properly configured
+   - Check for CSS conflicts
+
+### Development Tips
+
+- Use browser DevTools for debugging
+- Monitor Network tab for API calls
+- Check Console for Socket.IO connection status
+- Use React DevTools for component debugging
 
 ## License
 
@@ -301,9 +393,9 @@ Real-time features are handled in [`socket.js`](socket.js):
 For issues and questions:
 
 - Create an issue in the repository
-- Check existing documentation
-- Review error logs for debugging
+- Check browser console for errors
+- Verify backend server connection
 
 ---
 
-**Note**: Make sure to keep your `.env` file secure and never commit it to version control.
+**Note**: Make sure the backend server is running on the URL specified in your `.env` file before starting the frontend development server.

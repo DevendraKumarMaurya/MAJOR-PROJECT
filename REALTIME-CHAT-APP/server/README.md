@@ -65,7 +65,7 @@ server/
    ```bash
    # Using pnpm (recommended)
    pnpm install
-   
+
    # Or using npm
    npm install
    ```
@@ -88,10 +88,10 @@ server/
    ```bash
    # Windows (if installed as service)
    net start MongoDB
-   
+
    # macOS with Homebrew
    brew services start mongodb/brew/mongodb-community
-   
+
    # Linux
    sudo systemctl start mongod
    ```
@@ -281,7 +281,7 @@ Real-time features are handled in [`socket.js`](socket.js):
 ### Production Dependencies
 
 - `express` - Web framework
-- `mongoose` - MongoDB ODM  
+- `mongoose` - MongoDB ODM
 - `socket.io` - Real-time communication
 - `jsonwebtoken` - JWT implementation
 - `bcrypt` - Password hashing
