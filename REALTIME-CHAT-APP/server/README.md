@@ -312,7 +312,7 @@ Real-time features are handled in [`socket.js`](socket.js):
 
 ## License
 
-[Add your license information here]
+This project is licensed under the MIT License - see the [LICENSE](../../LICENSE) file for details.
 
 ## Support
 

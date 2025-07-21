@@ -125,7 +125,7 @@ npm install -g pnpm
 
 ## 📄 License
 
-This project is part of the Elevate Lads Internship program.
+This repository is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
 
 ---
 
